@@ -1,7 +1,11 @@
 import numpy
 from scipy import stats
 import matplotlib.pyplot as plt
+import matplotlib.image as pltimg
 from sklearn.metrics import r2_score
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
+import pydotplus
 import pandas
 from sklearn import linear_model
 
@@ -90,11 +94,12 @@ print(regr.coef_)'''
 
 
 
-x = numpy.random.normal(3, 1, 100)
-y = numpy.random.normal(150, 40, 100) / x
+#Train and test model
+'''x = numpy.random.normal(3, 1, 100)
+y = numpy.random.normal(150, 40, 100) /x
 
 #plt.scatter(x, y)
-#plt.show()
+# plt.show()
 
 train_x = x[:80]
 train_y = y[:80]
@@ -102,10 +107,34 @@ train_y = y[:80]
 test_x = x[80:]
 test_y = y[80:]
 
+mymodel = numpy.poly1d(numpy.polyfit(train_x, train_y, 4))
 
+myline = numpy.linspace(0, 6, 100)
 
+r2 = r2_score(test_y,mymodel(test_x))#is there relationship
+print(r2)
+print(mymodel(5))
+plt.scatter(test_x,test_y)
+plt.plot(myline, mymodel(myline))
+plt.show()'''
 
+df = pandas.read_csv("shows.csv")
+d = {'UK': 0, 'USA': 1, 'N': 2}
+df["Nationality"] = df["Nationality"].map(d)
+d = {'YES': 1, 'NO': 0}
+df['Go'] = df['Go'].map(d)
+features = ['Age', 'Experience', 'Rank', 'Nationality']
 
+X = df[features]
+y = df["Go"]
+dtree = DecisionTreeClassifier()
+dtree = dtree.fit(X, y)
+data = tree.export_graphviz(dtree, out_file=None, feature_names=features)
+graph = pydotplus.graph_from_dot_data(data)
+graph.write_png('mydecisiontree.png')
+img=pltimg.imread('mydecisiontree.png')
+imgplot = plt.imshow(img)
+plt.show()
 
 
 

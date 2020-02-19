@@ -122,7 +122,10 @@ y = json.dumps(x)
 yy = json.loads(y)
 print(yy["name"])'''
 
-
+#Remove the dublicates 
+# mylist = ["a", "b", "a", "c", "c"]
+# mylist = list(dict.fromkeys(mylist))
+# print(mylist[::-1])#reverse the array
 
 
 
